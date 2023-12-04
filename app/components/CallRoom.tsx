@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
+import { AgoraRTCProvider } from "agora-rtc-react";
 import { type IAgoraRTCClient } from "agora-rtc-sdk-ng";
 import VideoPlayer from "./VideoPlayer";
 
@@ -10,20 +10,30 @@ const token = process.env.NEXT_PUBLIC_APP_TOKEN;
 
 function CallRoom() {
     const [agoraClient, setAgoraClient] = useState<IAgoraRTCClient>();
+    const [render, setRender] = useState(false);
+    // const [AgoraProvider, setAgoraProvider] =
+    //     useState<typeof AgoraRTCProvider>();
     useEffect(() => {
-        const initSdk = async () => {
-            const AgoraRTC = (await import("agora-rtc-sdk-ng")).default;
-            const client = AgoraRTC.createClient({
-                mode: "live",
-                codec: "vp8",
-            });
-            setAgoraClient(client);
-        };
+        if (window) {
+            const initSdk = async () => {
+                const AgoraRTC = (await import("agora-rtc-sdk-ng")).default;
+                // const AgoraRTCReact = await import("agora-rtc-react");
+                const client = AgoraRTC.createClient({
+                    mode: "live",
+                    codec: "vp8",
+                });
+                setAgoraClient(client);
+                setRender(true);
+                // setAgoraProvider(AgoraRTCReact.AgoraRTCProvider);
+            };
 
-        initSdk();
+            initSdk();
+        }
     }, []);
 
-    if (!agoraClient) return <div>Loading...</div>;
+    // if (!agoraClient || !AgoraProvider) return <div>Loading...</div>;
+
+    if (!agoraClient || !render) return <div>Loading...</div>;
 
     return (
         <AgoraRTCProvider client={agoraClient}>

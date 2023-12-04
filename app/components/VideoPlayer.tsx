@@ -82,29 +82,6 @@ function VideoPlayer({ channelName, appID, token, client }: VideoPlayerProps) {
 
     const numUsers = remoteUsers.length + 1;
 
-    let numRows = 1;
-    let numCols = 1;
-
-    switch (numUsers) {
-        case 1:
-            numRows = 1;
-            numCols = 1;
-            break;
-        case 2:
-            numRows = 1;
-            numCols = 2;
-            break;
-        case 3:
-            numRows = 1;
-            numCols = 3;
-            break;
-        case 4:
-            numRows = 2;
-            numCols = 2;
-            break;
-        default:
-            break;
-    }
     if (deviceLoading || client.connectionState !== "CONNECTED")
         return (
             <div className="text-center text-lg italic font-bold">
